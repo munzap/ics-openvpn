@@ -42,6 +42,8 @@ import de.blinkt.openvpn.core.Preferences;
 import de.blinkt.openvpn.core.ProfileManager;
 import de.blinkt.openvpn.core.VPNLaunchHelper;
 import de.blinkt.openvpn.core.VpnStatus;
+import de.blinkt.openvpn.settings.Settings;
+import de.blinkt.openvpn.user.User;
 
 /**
  * This Activity actually handles two stages of a launcher shortcut's life cycle.
@@ -238,11 +240,17 @@ public class LaunchVPN extends Activity {
         if (requestCode == START_VPN_PROFILE) {
             if (resultCode == Activity.RESULT_OK) {
                 int needpw = mSelectedProfile.needUserPWInput(mTransientCertOrPCKS12PW, mTransientAuthPW);
+              /*
                 if (needpw != 0) {
                     VpnStatus.updateStateString("USER_VPN_PASSWORD", "", R.string.state_user_vpn_password,
                             ConnectionStatus.LEVEL_WAITING_FOR_USER_INPUT);
                     askForPW(needpw);
                 } else {
+*/
+                    User user = Settings.getInstance().getUser();
+                    mSelectedProfile.mUsername = user.getUsername();
+                    mSelectedProfile.mPassword = user.getPassword();
+
                     SharedPreferences prefs = Preferences.getDefaultSharedPreferences(this);
                     boolean showLogWindow = prefs.getBoolean("showlogwindow", true);
 
@@ -251,7 +259,7 @@ public class LaunchVPN extends Activity {
                     ProfileManager.updateLRU(this, mSelectedProfile);
                     VPNLaunchHelper.startOpenVpn(mSelectedProfile, getBaseContext());
                     finish();
-                }
+  //              }
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 // User does not want us to start, so we just vanish
                 VpnStatus.updateStateString("USER_VPN_PERMISSION_CANCELLED", "", R.string.state_user_vpn_permission_cancelled,
@@ -268,7 +276,8 @@ public class LaunchVPN extends Activity {
     void showLogWindow() {
 
         Intent startLW = new Intent();
-        startLW.setComponent(new ComponentName(this, getPackageName() + ".activities.LogWindow"));
+        //startLW.setComponent(new ComponentName(this, getPackageName() + ".activities.LogWindow"));
+        startLW.setComponent(new ComponentName(this, Settings.ORIG_PACKAGE_NAME + ".activities.LogWindow"));
         startLW.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(startLW);
 

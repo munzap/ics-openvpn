@@ -3,7 +3,7 @@
   ~ Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
   -->
 <resources>
-    <string name="app">OpenVPN for Android</string>
+    <string name="app">Identity Cloaker for Android</string>
     <string name="address">Server Address:</string>
     <string name="port">Server Port:</string>
     <string name="location">Location</string>
@@ -112,7 +112,7 @@
     <string name="version_info">%1$s %2$s</string>
     <string name="send_logfile">Send log file</string>
     <string name="send">Send</string>
-    <string name="ics_openvpn_log_file">ICS OpenVPN log file</string>
+    <string name="ics_openvpn_log_file">IDC log OpenVPN log file</string>
     <string name="copied_entry">Copied log entry to clip board</string>
     <string name="tap_mode">Tap Mode</string>
     <string name="faq_tap_mode">Tap Mode is not possible with the non root VPN API. Therefore this application cannot provide tap support</string>
@@ -194,7 +194,7 @@
     <string name="warn_no_dns">No DNS servers being used. Name resolution may not work. Consider setting custom DNS Servers. Please also note that Android will keep using your proxy settings specified for your mobile/Wi-Fi connection when no DNS servers are set.</string>
     <string name="dns_add_error">Could not add DNS Server \"%1$s\", rejected by the system: %2$s</string>
     <string name="ip_add_error">Could not configure IP Address \"%1$s\", rejected by the system: %2$s</string>
-    <string name="faq_howto">&lt;p&gt;Get a working config (tested on your computer or download from your provider/organisation)&lt;/p&gt;&lt;p&gt;If it is a single file with no extra pem/pkcs12 files you can email the file yourself and open the attachment. If you have multiple files put them on your sd card.&lt;/p&gt;&lt;p&gt;Click on the email attachment/Use the folder icon in the vpn list to import the config file&lt;/p&gt;&lt;p&gt;If there are errors about missing files put the missing files on your sd card.&lt;/p&gt;&lt;p&gt;Click on the save symbol to add the imported VPN to your VPN list&lt;/p&gt;&lt;p&gt;Connect the VPN by clicking on the name of the VPN&lt;/p&gt;&lt;p&gt;If there are error or warnings in the log try to understand the warnings/error and try to fix them&lt;/p&gt; </string>
+    <string name="faq_howto">&lt;p&gt;Doubleclick on prefered server to connect &lt;/p&gt;&lt;p&gt;  </string>
     <string name="faq_howto_title">Quick Start</string>
     <string name="setting_loadtun_summary">Try to load the tun.ko kernel module before trying to connect. Needs rooted devices.</string>
     <string name="setting_loadtun">Load tun module</string>
@@ -220,7 +220,7 @@
     <string name="faq_routing">The Routing and interface configuration is not done via traditional ifconfig/route commands but by using the VPNService API. This results in a different routing configuration than on other OSes. \nThe configuration of the VPN tunnel consists of the IP address and the networks that should be routed over this interface. Especially, no peer partner address or gateway address is needed or required. Special routes to reach the VPN Server (for example added when using redirect-gateway) are not needed either. The application will consequently ignore these settings when importing a configuration. The app ensures with the VPNService API that the connection to the server is not routed through the VPN tunnel.\nThe VPNService API does not allow specifying networks that should not be routed via the VPN. As a workaround the app tries to detect networks that should not be routed over tunnel (e.g. route x.x.x.x y.y.y.y net_gateway) and calculates a set of routes that excludes this routes to emulate the behaviour of other platforms. The log windows shows the configuration of the VPNService upon establishing a connection.\nBehind the scenes: Android 4.4+ does use policy routing. Using route/ifconfig will not show the installed routes. Instead use ip rule, iptables -t mangle -L</string>
     <string name="persisttun_summary">Do not fallback to no VPN connection when OpenVPN is reconnecting.</string>
     <string name="persistent_tun_title">Persistent tun</string>
-    <string name="openvpn_log">OpenVPN Log</string>
+    <string name="openvpn_log">IDC Log</string>
     <string name="import_config">Import OpenVPN configuration</string>
     <string name="battery_consumption_title">Battery consumption</string>
     <string name="baterry_consumption">In my personal tests the main reason for high battery consumption of OpenVPN are the keepalive packets. Most OpenVPN servers have a configuration directive like \'keepalive 10 60\' which causes the client and server to exchange keepalive packets every ten seconds. &lt;p&gt; While these packets are small and do not use much traffic, they keep the mobile radio network busy and increase the energy consumption. (See also &lt;a href="https://developer.android.com/training/efficient-downloads/efficient-network-access.html#RadioStateMachine"&gt;The Radio State Machine | Android Developers&lt;/a&gt;) &lt;p&gt; This keepalive setting cannot be changed on the client. Only the system administrator of the OpenVPN can change the setting. &lt;p&gt; Unfortunately using a keepalive larger than 60 seconds with UDP can cause some NAT gateways to drop the connection due to an inactivity timeout. Using TCP with a long keep alive timeout works, but tunneling TCP over TCP performs extremely poorly on connections with high packet loss. (See &lt;a href="http://sites.inka.de/bigred/devel/tcp-tcp.html"&gt;Why TCP Over TCP Is A Bad Idea&lt;/a&gt;)</string>
@@ -502,5 +502,32 @@
     <string name="faq_ncp">There are some variation of this message depending on the exact situation. They all have in common that server and client could not agree on a common cipher. The main reasons are: &lt;ul>&lt;li> You are still relying on the fact that OpenVPN 2.4 and older allowed BF-CBC in the default configuration (if no --cipher was set). OpenVPN 2.5 does not allow it per default anymore since it is a &lt;a href="https://community.openvpn.net/openvpn/wiki/SWEET32">broken/outdated cipher&lt;/a>.&lt;/li>&lt;li>The server runs OpenVPN 2.3 (or even older) with --enable-small (at least 4-5 year old OpenVPN)&lt;/li>&lt;li>Broken configuration (e.g., mismatching data-ciphers on client and server)&lt;/li> &lt;p> The &lt;a href=\"https://github.com/OpenVPN/openvpn/blob/master/doc/man-sections/cipher-negotiation.rst\">OpenVPN manual section on cipher negotiation&lt;/a> explains the different scenarios of cipher negotiation very well and what to do in these situation.&lt;p>TP-Link devices use a at least 5 year old OpenVPN 2.3.x version (possibly older) on their devices, even in the 2019/2020 models.&lt;p>Last but not least, there is a popular VPN provider that has a broken server that always says it is using \'BF-CBC\' because its developer thought it would be a good idea to create a proprietary cipher negotiation patch that is incompatible with standard OpenVPN.&lt;p>In summary: all sane configurations should not get these errors. But (apart from the broken VPN provider\'s server) the client can be persuaded to still connect (fixing the sympton and not the real problem).</string>
     <string name="check_peer_fingerprint">Check peer certificate fingerprint</string>
     <string name="fingerprint">(Enter the SHA256 fingerprint of the server certificate(s))</string>
+
+
+    <string name="main_exitQuestion">Do you really want to quit?</string>
+    <string name="question_btn_yes">Yes</string>
+    <string name="question_btn_no">No</string>
+    <string name="main_btnChange">Change Account\nInformation</string>
+    <string name="settings_broadcast_validationError_port">Port pro broadcast není platný.</string>
+    <string name="settings_server_validationError_port">Port pro server není platný.</string>
+    <string name="Ok">global_dialog_buttonOk</string>
+    <string name="global_dialog_buttonOk">OK</string>
+    <string name="app_name">Identity Cloaker for Android</string>
+    <string name="downloading_list">Downloading list of servers</string>
+    <string name="unpacking_list">Unpacking list of servers</string>
+    <string name="secure_phone">Secure Phone</string>
+    <string name="version">Version</string>
+    <string name="refresh_list">Refresh list</string>
+    <string name="verifying_user">Verifying user</string>
+    <string name="internet_not_found">Internet connection not found!</string>
+    <string name="connection_failed">Connection has failed!</string>
+    <string name="ok">OK</string>
+    <string name="credentials_invalid">User credentials are invalid, check your login details,\nor contact customer support for assistance.</string>
+    <string name="credentials_expired_valid">Your subscription has expired.\nYou can renew it at your member area.</string>
+    <string name="credentials_locked">Your account was locked. Please contact customer support for assistance.</string>
+    <string name="credentials_non_existing">This username doesn\'t exist, or subscription has expired more than 30 days ago.\nPlease check your login details, or contact support for assistance.</string>
+    <string name="credentials_valid">Credentials valid</string>
+    <string name="credentials_failed"> ValidationFailed = Connection to the main server failed</string>
+    <string name="application_crashed">Application has crashed. Crash report will be sent</string>
 
 </resources>

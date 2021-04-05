@@ -8,6 +8,7 @@ import com.android.build.gradle.api.ApplicationVariant
 plugins {
     id("com.android.application")
     id("checkstyle")
+    id("com.jakewharton.hugo")
 
     kotlin("android")
     kotlin("android.extensions")
@@ -17,10 +18,11 @@ android {
     compileSdkVersion(30)
 
     defaultConfig {
+        applicationId ("com.tfr.idc_android")
         minSdkVersion(14)
         targetSdkVersion(30)  //'Q'.toInt()
-        versionCode = 176
-        versionName = "0.7.22"
+        versionCode = 6
+        versionName = "0.3.0"
 
         externalNativeBuild {
             cmake {

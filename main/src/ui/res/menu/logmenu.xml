@@ -34,10 +34,13 @@
             app:showAsAction="ifRoom"
             android:title="@string/cancel_connection_long"
             android:titleCondensed="@string/cancel_connection"/>
+    <!--
     <item
             android:id="@+id/edit_vpn"
             android:alphabeticShortcut="e"
             android:icon="@drawable/ic_menu_edit"
             app:showAsAction="ifRoom"
-            android:title="@string/edit_vpn"/>
+            android:title="@string/edit_vpn"
+
+       -->
 </menu>

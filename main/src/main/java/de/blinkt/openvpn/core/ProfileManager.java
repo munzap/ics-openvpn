@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -216,6 +217,25 @@ public class ProfileManager {
         if (mLastConnectedVpn == profile)
             mLastConnectedVpn = null;
 
+    }
+
+    public void removeProfiles(Context context) {
+
+        for (HashMap.Entry<String, VpnProfile> entry : profiles.entrySet()) {
+            String key = entry.getKey();
+            VpnProfile profile = entry.getValue();
+
+            // do what you have to do here
+            // In your case, another loop.
+
+            String vpnentry = profile.getUUID().toString();
+
+            context.deleteFile(vpnentry + ".vp");
+        }
+
+        profiles.clear();
+        mLastConnectedVpn = null;
+        saveProfileList(context);
     }
 
     public static VpnProfile get(Context context, String profileUUID) {

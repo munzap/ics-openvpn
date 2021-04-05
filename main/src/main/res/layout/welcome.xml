@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/relativeLayout1"	android:layout_width="fill_parent" android:gravity="center">		
+	 
+	<LinearLayout  android:layout_height="wrap_content"  android:layout_width="wrap_content" android:orientation="vertical" android:gravity="center">
+	
+		<ImageView android:src="@drawable/identitycloaker_logo" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="10dp" />
+				
+		<LinearLayout android:layout_width="wrap_content"	android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center" android:background="@drawable/welcome_table" >								    			
+			<TextView android:layout_width="wrap_content" android:text="@string/app_name" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content"  android:layout_margin="5dp"  android:textColor="#000000" />
+			<TextView android:layout_width="wrap_content" android:id="@+id/versionTextView" android:text="@string/version" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content"  android:layout_margin="5dp" android:textColor="#000000"  />
+			<TextView android:layout_width="wrap_content" android:id="@+id/pdaNameTextView" android:singleLine="true" android:text="Pda name" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" android:layout_margin="5dp" android:textColor="#000000" />		
+		</LinearLayout>
+		
+		<LinearLayout android:layout_width="match_parent"	android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center">								    														
+			<TextView android:layout_width="wrap_content" android:id="@+id/statusTextView" android:text="Server list: No data" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content"  android:layout_margin="10dp"/>
+		</LinearLayout>
+		
+		
+		<LinearLayout android:layout_width="wrap_content"	android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center">
+			<LinearLayout android:layout_width="wrap_content"	android:layout_height="wrap_content"  android:layout_marginBottom="10dp">
+				<Button android:id="@+id/main_btnChange"   android:text="@string/main_btnChange" style="@style/ButtonMain" android:background="@drawable/settings_button_selector" android:onClick="onChangeAccountInfoClick" android:layout_height="wrap_content"  android:layout_width="wrap_content" android:textSize="28px" android:textStyle="bold" />
+				<Button  android:id="@+id/refreshButton"  android:text="@string/refresh_list" android:layout_height="wrap_content"  android:layout_width="wrap_content" style="@style/ButtonMain" android:background="@drawable/refresh_button_selector" android:onClick="onSearchButtonClick" android:textSize="28px" android:textStyle="bold"/>
+			</LinearLayout>
+										
+			<Button android:layout_width="wrap_content" android:text="@string/secure_phone" android:layout_height="wrap_content" android:id="@+id/nextButton"  style="@style/ButtonMain" android:onClick="onNextButtonClick" android:background="@drawable/next_button_selector" android:textSize="28px" android:textStyle="bold"></Button>
+		</LinearLayout>			
+	</LinearLayout>		
+		
+</LinearLayout>

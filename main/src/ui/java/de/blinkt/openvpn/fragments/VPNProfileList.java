@@ -57,6 +57,7 @@ import de.blinkt.openvpn.core.PasswordDialogFragment;
 import de.blinkt.openvpn.core.Preferences;
 import de.blinkt.openvpn.core.ProfileManager;
 import de.blinkt.openvpn.core.VpnStatus;
+import hugo.weaving.DebugLog;
 
 import static de.blinkt.openvpn.core.ConnectionStatus.LEVEL_WAITING_FOR_USER_INPUT;
 import static de.blinkt.openvpn.core.OpenVPNService.DISCONNECT_VPN;
@@ -68,7 +69,7 @@ public class VPNProfileList extends ListFragment implements OnClickListener, Vpn
     public final static int RESULT_VPN_DELETED = Activity.RESULT_FIRST_USER;
     public final static int RESULT_VPN_DUPLICATE = Activity.RESULT_FIRST_USER + 1;
     // Shortcut version is increased to refresh all shortcuts
-    final static int SHORTCUT_VERSION = 1;
+
     private static final int MENU_ADD_PROFILE = Menu.FIRST;
     private static final int START_VPN_CONFIG = 92;
     private static final int SELECT_PROFILE = 43;
@@ -83,6 +84,7 @@ public class VPNProfileList extends ListFragment implements OnClickListener, Vpn
     private ArrayAdapter<VpnProfile> mArrayadapter;
     private Intent mLastIntent;
 
+    @DebugLog
     @Override
     public void updateState(String state, String logmessage, final int localizedResId, ConnectionStatus level, Intent intent) {
         requireActivity().runOnUiThread(() -> {
@@ -122,128 +124,22 @@ public class VPNProfileList extends ListFragment implements OnClickListener, Vpn
         }
     }
 
+    @DebugLog
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N_MR1)
-    void updateDynamicShortcuts() {
-        PersistableBundle versionExtras = new PersistableBundle();
-        versionExtras.putInt("version", SHORTCUT_VERSION);
-
-        ShortcutManager shortcutManager = getContext().getSystemService(ShortcutManager.class);
-        if (shortcutManager.isRateLimitingActive())
-            return;
-
-        List<ShortcutInfo> shortcuts = shortcutManager.getDynamicShortcuts();
-        int maxvpn = shortcutManager.getMaxShortcutCountPerActivity() - 1;
 
 
-        ShortcutInfo disconnectShortcut = new ShortcutInfo.Builder(getContext(), "disconnectVPN")
-                .setShortLabel("Disconnect")
-                .setLongLabel("Disconnect VPN")
-                .setIntent(new Intent(getContext(), DisconnectVPN.class).setAction(DISCONNECT_VPN))
-                .setIcon(Icon.createWithResource(getContext(), R.drawable.ic_shortcut_cancel))
-                .setExtras(versionExtras)
-                .build();
-
-        LinkedList<ShortcutInfo> newShortcuts = new LinkedList<>();
-        LinkedList<ShortcutInfo> updateShortcuts = new LinkedList<>();
-
-        LinkedList<String> removeShortcuts = new LinkedList<>();
-        LinkedList<String> disableShortcuts = new LinkedList<>();
-
-        boolean addDisconnect = true;
-
-
-        TreeSet<VpnProfile> sortedProfilesLRU = new TreeSet<VpnProfile>(new VpnProfileLRUComparator());
-        ProfileManager profileManager = ProfileManager.getInstance(getContext());
-        sortedProfilesLRU.addAll(profileManager.getProfiles());
-
-        LinkedList<VpnProfile> LRUProfiles = new LinkedList<>();
-        maxvpn = Math.min(maxvpn, sortedProfilesLRU.size());
-
-        for (int i = 0; i < maxvpn; i++) {
-            LRUProfiles.add(sortedProfilesLRU.pollFirst());
-        }
-
-        for (ShortcutInfo shortcut : shortcuts) {
-            if (shortcut.getId().equals("disconnectVPN")) {
-                addDisconnect = false;
-                if (shortcut.getExtras() == null
-                        || shortcut.getExtras().getInt("version") != SHORTCUT_VERSION)
-                    updateShortcuts.add(disconnectShortcut);
-
-            } else {
-                VpnProfile p = ProfileManager.get(getContext(), shortcut.getId());
-                if (p == null || p.profileDeleted) {
-                    if (shortcut.isEnabled()) {
-                        disableShortcuts.add(shortcut.getId());
-                        removeShortcuts.add(shortcut.getId());
-                    }
-                    if (!shortcut.isPinned())
-                        removeShortcuts.add(shortcut.getId());
-                } else {
-
-                    if (LRUProfiles.contains(p))
-                        LRUProfiles.remove(p);
-                    else
-                        removeShortcuts.add(p.getUUIDString());
-
-                    if (!p.getName().equals(shortcut.getShortLabel())
-                            || shortcut.getExtras() == null
-                            || shortcut.getExtras().getInt("version") != SHORTCUT_VERSION)
-                        updateShortcuts.add(createShortcut(p));
-
-
-                }
-
-            }
-
-        }
-        if (addDisconnect)
-            newShortcuts.add(disconnectShortcut);
-        for (VpnProfile p : LRUProfiles)
-            newShortcuts.add(createShortcut(p));
-
-        if (updateShortcuts.size() > 0)
-            shortcutManager.updateShortcuts(updateShortcuts);
-        if (removeShortcuts.size() > 0)
-            shortcutManager.removeDynamicShortcuts(removeShortcuts);
-        if (newShortcuts.size() > 0)
-            shortcutManager.addDynamicShortcuts(newShortcuts);
-        if (disableShortcuts.size() > 0)
-            shortcutManager.disableShortcuts(disableShortcuts, "VpnProfile does not exist anymore.");
-    }
-
-    @RequiresApi(Build.VERSION_CODES.N_MR1)
-    ShortcutInfo createShortcut(VpnProfile profile) {
-        Intent shortcutIntent = new Intent(Intent.ACTION_MAIN);
-        shortcutIntent.setClass(getActivity(), LaunchVPN.class);
-        shortcutIntent.putExtra(LaunchVPN.EXTRA_KEY, profile.getUUID().toString());
-        shortcutIntent.setAction(Intent.ACTION_MAIN);
-        shortcutIntent.putExtra("EXTRA_HIDELOG", true);
-
-        PersistableBundle versionExtras = new PersistableBundle();
-        versionExtras.putInt("version", SHORTCUT_VERSION);
-
-        return new ShortcutInfo.Builder(getContext(), profile.getUUIDString())
-                .setShortLabel(profile.getName())
-                .setLongLabel(getString(R.string.qs_connect, profile.getName()))
-                .setIcon(Icon.createWithResource(getContext(), R.drawable.ic_shortcut_vpn_key))
-                .setIntent(shortcutIntent)
-                .setExtras(versionExtras)
-                .build();
-    }
 
     @Override
     public void onResume() {
         super.onResume();
         setListAdapter();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-            updateDynamicShortcuts();
+         //   updateDynamicShortcuts();
         }
         VpnStatus.addStateListener(this);
     }
@@ -254,6 +150,7 @@ public class VPNProfileList extends ListFragment implements OnClickListener, Vpn
         VpnStatus.removeStateListener(this);
     }
 
+    @DebugLog
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -291,8 +188,10 @@ public class VPNProfileList extends ListFragment implements OnClickListener, Vpn
         populateVpnList();
     }
 
+    @DebugLog
     private void populateVpnList() {
         boolean sortByLRU = Preferences.getDefaultSharedPreferences(getActivity()).getBoolean(PREF_SORT_BY_LRU, false);
+
         Collection<VpnProfile> allvpn = getPM().getProfiles();
         TreeSet<VpnProfile> sortedset;
         if (sortByLRU)
@@ -306,10 +205,13 @@ public class VPNProfileList extends ListFragment implements OnClickListener, Vpn
 
         setListAdapter(mArrayadapter);
         mArrayadapter.notifyDataSetChanged();
+
+
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        /*
         menu.add(0, MENU_ADD_PROFILE, 0, R.string.menu_add_profile)
                 .setIcon(R.drawable.ic_menu_add)
                 .setAlphabeticShortcut('a')
@@ -321,19 +223,19 @@ public class VPNProfileList extends ListFragment implements OnClickListener, Vpn
                 .setAlphabeticShortcut('i')
                 .setTitleCondensed(getActivity().getString(R.string.menu_import_short))
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-
+*/
         menu.add(0, MENU_CHANGE_SORTING, 0, R.string.change_sorting)
                 .setIcon(R.drawable.ic_sort)
                 .setAlphabeticShortcut('s')
                 .setTitleCondensed(getString(R.string.sort))
                 .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-
+/*
         menu.add(0, MENU_IMPORT_AS, 0, R.string.import_from_as)
                 .setIcon(R.drawable.ic_menu_import)
                 .setAlphabeticShortcut('p')
                 .setTitleCondensed("Import AS")
                 .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-
+*/
     }
 
     @Override
@@ -563,7 +465,7 @@ public class VPNProfileList extends ListFragment implements OnClickListener, Vpn
 
     }
 
-    static class VpnProfileLRUComparator implements Comparator<VpnProfile> {
+    public static class VpnProfileLRUComparator implements Comparator<VpnProfile> {
 
         VpnProfileNameComparator nameComparator = new VpnProfileNameComparator();
 
@@ -609,9 +511,10 @@ public class VPNProfileList extends ListFragment implements OnClickListener, Vpn
                 }
             });
 
+            /*
             View settingsview = v.findViewById(R.id.quickedit_settings);
             settingsview.setOnClickListener(view -> editVPN(profile));
-
+*/
             TextView subtitle = (TextView) v.findViewById(R.id.vpn_item_subtitle);
             if (profile.getUUIDString().equals(VpnStatus.getLastConnectedVPNProfile())) {
                 subtitle.setText(mLastStatusMessage);

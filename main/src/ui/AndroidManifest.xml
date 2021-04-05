@@ -17,10 +17,11 @@
     <application
             android:banner="@mipmap/banner_tv"
             tools:targetApi="lollipop">
+
         <activity
-                android:exported="true"
-                android:name=".activities.MainActivity"
-                tools:ignore="ExportedActivity">
+            android:name=".activities.WelcomeActivity"
+            android:label="@string/app_name"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,6 +29,12 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity
+                android:exported="true"
+                android:name=".activities.MainActivity"
+                tools:ignore="ExportedActivity">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES" />
             </intent-filter>
@@ -160,7 +167,7 @@
 
         <provider
                 android:name=".FileProvider"
-                android:authorities="de.blinkt.openvpn.FileProvider"
+                android:authorities="com.tfr.idc_android.FileProvider"
                 android:exported="true"
                 android:grantUriPermissions="true"
                 tools:ignore="ExportedContentProvider" />

@@ -437,7 +437,9 @@ public class LogFragment extends ListFragment implements StateListener, SeekBar.
             return true;
         } else if (item.getItemId() == R.id.send) {
             ladapter.shareLog();
-        } else if (item.getItemId() == R.id.edit_vpn) {
+        }
+        /*
+        else if (item.getItemId() == R.id.edit_vpn) {
             VpnProfile lastConnectedprofile = ProfileManager.get(getActivity(), VpnStatus.getLastConnectedVPNProfile());
 
             if (lastConnectedprofile != null) {
@@ -447,7 +449,7 @@ public class LogFragment extends ListFragment implements StateListener, SeekBar.
             } else {
                 Toast.makeText(getActivity(), R.string.log_no_last_vpn, Toast.LENGTH_LONG).show();
             }
-        } else if (item.getItemId() == R.id.toggle_time) {
+        }*/ else if (item.getItemId() == R.id.toggle_time) {
             showHideOptionsPanel();
         } else if (item.getItemId() == android.R.id.home) {
             // This is called when the Home (Up) button is pressed

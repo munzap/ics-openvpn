@@ -10,6 +10,7 @@ import android.annotation.TargetApi
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -37,10 +38,9 @@ import de.blinkt.openvpn.views.FileSelectLayout
 import de.blinkt.openvpn.views.FileSelectLayout.FileSelectCallback
 import java.io.*
 import java.net.URLDecoder
-import java.nio.charset.StandardCharsets
 import java.util.*
 
-class ConfigConverter : BaseActivity(), FileSelectCallback, View.OnClickListener {
+class ConfigConverter /*: BaseActivity(), FileSelectCallback, View.OnClickListener*/ {
 
     private var mResult: VpnProfile? = null
 
@@ -58,7 +58,7 @@ class ConfigConverter : BaseActivity(), FileSelectCallback, View.OnClickListener
     private var mImportTask: AsyncTask<Void, Void, Int>? = null
     private lateinit var mLogLayout: LinearLayout
     private lateinit var mProfilenameLabel: TextView
-
+/*
     override fun onClick(v: View) {
         if (v.id == R.id.fab_save)
             userActionSaveProfile()
@@ -194,11 +194,26 @@ class ConfigConverter : BaseActivity(), FileSelectCallback, View.OnClickListener
         vpl.addProfile(mResult)
         vpl.saveProfile(this, mResult)
         vpl.saveProfileList(this)
-        result.putExtra(VpnProfile.EXTRA_PROFILEUUID, mResult!!.uuid.toString())
+        result.putExtra(VpnProfile.EXTRA_PROFILEUUID, mResult!!.uuid.toString());
         setResult(Activity.RESULT_OK, result)
         finish()
     }
+*/
+    fun saveProfile(name: String?, context: Context) {
+        //Intent result = new Intent();
+        val vpl = ProfileManager.getInstance(context)
 
+        //setUniqueProfileName(vpl);
+        mResult!!.mName = name
+        vpl.addProfile(mResult)
+        vpl.saveProfile(context, mResult);
+ //       vpl.saveProfileList(this);
+
+        //result.putExtra(VpnProfile.EXTRA_PROFILEUUID,mResult.getUUID().toString());
+        //setResult(Activity.RESULT_OK, result);
+        //finish();
+    }
+/*
     fun showCertDialog() {
         try {
 
@@ -296,7 +311,7 @@ class ConfigConverter : BaseActivity(), FileSelectCallback, View.OnClickListener
         inflater.inflate(R.menu.import_menu, menu)
         return true
     }
-
+*/
     private fun embedFile(filename: String?, type: Utils.FileType, onlyFindFileAndNullonNotFound: Boolean): String? {
         if (filename == null)
             return null
@@ -375,13 +390,14 @@ class ConfigConverter : BaseActivity(), FileSelectCallback, View.OnClickListener
 
         return foundfile
     }
-
+/*
     private fun addMissingFileDialogs() {
         for ((key, value) in fileSelectMap) {
             if (value == null)
                 addFileSelectDialog(key)
         }
     }
+
 
     private fun addFileSelectDialog(type: Utils.FileType?) {
 
@@ -414,7 +430,7 @@ class ConfigConverter : BaseActivity(), FileSelectCallback, View.OnClickListener
     private fun getFileLayoutOffset(type: Utils.FileType): Int {
         return CHOOSE_FILE_OFFSET + type.value
     }
-
+*/
 
     private fun findFileRaw(filename: String?): File? {
         if (filename == null || filename == "")
@@ -482,7 +498,8 @@ class ConfigConverter : BaseActivity(), FileSelectCallback, View.OnClickListener
         try {
             filedata = readBytesFromFile(possibleFile)
         } catch (e: IOException) {
-            log(e.localizedMessage)
+          //  log(e.localizedMessage)
+              e.printStackTrace();
             return null
         }
 
@@ -548,7 +565,7 @@ class ConfigConverter : BaseActivity(), FileSelectCallback, View.OnClickListener
         }
 
     }
-
+/*
     private fun updateFileSelectDialogs() {
         for ((key, value) in fileSelectMap) {
             value?.setData(getFileDialogInfo(key).second, this)
@@ -753,8 +770,8 @@ class ConfigConverter : BaseActivity(), FileSelectCallback, View.OnClickListener
     private fun addViewToLog(view: View?) {
         mLogLayout.addView(view, mLogLayout.childCount - 1)
     }
-
-    private fun doImport(inputStream: InputStream) {
+*/
+    public fun doImport(inputStream: InputStream) {
         val cp = ConfigParser()
         try {
             val isr = InputStreamReader(inputStream)
@@ -766,10 +783,10 @@ class ConfigConverter : BaseActivity(), FileSelectCallback, View.OnClickListener
 
         } catch (e: IOException) {
             log(R.string.error_reading_config_file)
-            log(e.localizedMessage)
+            //log(e.localizedMessage)
         } catch (e: ConfigParseError) {
             log(R.string.error_reading_config_file)
-            log(e.localizedMessage)
+         //   log(e.localizedMessage)
         } finally {
             inputStream.close()
         }
@@ -777,7 +794,7 @@ class ConfigConverter : BaseActivity(), FileSelectCallback, View.OnClickListener
         mResult = null
     }
 
-
+/*
     private fun displayWarnings() {
         if (mResult!!.mUseCustomConfig) {
             log(R.string.import_warning_custom_options)
@@ -796,8 +813,10 @@ class ConfigConverter : BaseActivity(), FileSelectCallback, View.OnClickListener
 
     }
 
+*/
+
     private fun log(ressourceId: Int, vararg formatArgs: Any) {
-        log(getString(ressourceId, *formatArgs))
+       // log(getString(ressourceId, *formatArgs))
     }
 
     companion object {

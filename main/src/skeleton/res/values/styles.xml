@@ -15,4 +15,18 @@
     <style name="blinkt" parent="blinkt.baseTheme" />
 
 
+
+    <style name="Button" parent="@android:style/Widget.Button">
+        <item name="android:textColor">#FFF</item>
+        <item name="android:textSize">14dip</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:background">@drawable/button_black</item>
+    </style>
+
+    <style name="ButtonMain" parent="@style/Button">
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
 </resources>

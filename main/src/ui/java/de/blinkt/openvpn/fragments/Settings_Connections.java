@@ -38,9 +38,11 @@ public class Settings_Connections extends Settings_Fragment implements View.OnCl
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        /*
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
             inflater.inflate(R.menu.connections, menu);
         super.onCreateOptionsMenu(menu, inflater);
+         */
     }
 
     @Nullable
