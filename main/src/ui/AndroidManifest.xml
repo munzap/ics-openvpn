@@ -72,6 +72,7 @@
                     android:name="android.service.quicksettings.ACTIVE_TILE"
                     android:value="false" />
         </service>
+        <!--
         <activity
                 android:name=".activities.ConfigConverter"
                 android:exported="true"
@@ -101,8 +102,9 @@
                 <data android:mimeType="application/ovpn" />
             </intent-filter>
             <intent-filter android:label="@string/import_config">
-
+-->
                 <!-- http://stackoverflow.com/questions/7f030832/associating-certain-file-extension-to-my-android-application/7102838#7102838 -->
+        <!--
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.BROWSABLE" />
@@ -117,7 +119,10 @@
                 <data android:pathPattern=".*..*.ovpn" />
                 <data android:pathPattern=".*.ovpn" />
             </intent-filter>
-        </activity> <!-- https://commonsware.com/blog/2019/03/27/death-external-storage-stay-away-files.html -->
+        </activity>
+         -->
+         <!-- https://commonsware.com/blog/2019/03/27/death-external-storage-stay-away-files.html -->
+        <!--
         <activity-alias
                 android:exported="true"
                 android:name=".activities.ConfigConverterFile"
@@ -139,7 +144,7 @@
                 <data android:pathPattern=".*.ovpn" />
             </intent-filter>
         </activity-alias>
-
+-->
         <activity
                 android:exported="true"
                 android:name=".activities.CreateShortcuts"
