@@ -19,7 +19,7 @@ public class DMProvider
 			{
 				if (instance == null)
 				{
-					instance = new ApacheDownloader();				   
+					instance = new OkHttpDownloader();
 				}									
 				
 				return instance;

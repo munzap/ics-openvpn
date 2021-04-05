@@ -22,14 +22,14 @@ import okhttp3.Response;
 /*
  * HTTP Downloader http://hc.apache.org/httpcomponents-client-ga/index.html 
  */
-public class ApacheDownloader implements IDownloader {
+public class OkHttpDownloader implements IDownloader {
 
 	OkHttpClient client;
 
-	public ApacheDownloader()
+	public OkHttpDownloader()
 	{
 		int THREAD_ID = 10000;
-		TrafficStats.setThreadStatsTag(THREAD_ID);
+		TrafficStats.setThreadStatsTag(THREAD_ID); // crash otherwise
 
 		client = new OkHttpClient.Builder().connectTimeout(15, TimeUnit.SECONDS).build();
 	}
@@ -72,9 +72,6 @@ public class ApacheDownloader implements IDownloader {
 
 	@Override
 	public void downloadFile(String strUrl, String strFile) throws MalformedURLException, IOException {
-
-		int THREAD_ID = 10000;
-		TrafficStats.setThreadStatsTag(THREAD_ID);
 
 		Request request = new Request.Builder().url(strUrl).build();
 		Response response = client.newCall(request).execute();

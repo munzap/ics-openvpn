@@ -30,7 +30,7 @@ import hugo.weaving.DebugLog;
 
 import static de.blinkt.openvpn.core.OpenVPNService.DISCONNECT_VPN;
 
-public class ShortcutUpdater {
+public class ShortcutUpdater { // extracted from profile list it was blocking main thread, it is crashing occasionally
     final static int SHORTCUT_VERSION = 1;
     Context context;
     Activity activity;

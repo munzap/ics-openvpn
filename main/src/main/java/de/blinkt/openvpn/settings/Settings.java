@@ -15,7 +15,6 @@ import de.blinkt.openvpn.user.User;
 
 public class Settings {	
 
-	public static String TBLK_CONFIGS_TEMP_DIR = "/ConfigsTemp/";
 	public static String TBLK_CONFIGS_DIR = "/Configurations/";
 	public static String TBLK_ZIP_CONFIGS = "/configs.zip";
 	public static String LAST_OVPN_FILES_TIMESTAMP = "OVPN_FILES_TIMESTAMP";

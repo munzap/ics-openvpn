@@ -38,7 +38,7 @@ public class DownloadConfigsAsync extends AsyncTask<String, Void, DownloadResult
     	context = receiver;
     }
 
-
+    // add profile to evidence
     @DebugLog
     public void addProfiles()
     {
@@ -72,14 +72,12 @@ public class DownloadConfigsAsync extends AsyncTask<String, Void, DownloadResult
                 e.printStackTrace();
             }
 
-            conv.doImport(is);
-            conv.saveProfile(f.getName().replaceFirst("[.][^.]+$", ""), context);
-            String x = f.getName();
-            System.out.println(x);
+            conv.doImport(is); // import profile to ConfiConverter class
+            conv.saveProfile(f.getName().replaceFirst("[.][^.]+$", ""), context); // save profile to .vp file
         }
 
 
-        vpl.saveProfileList(context);
+        vpl.saveProfileList(context); // save list into preferences
     }
 
     protected DownloadResult doInBackground(String... params) {

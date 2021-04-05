@@ -26,6 +26,7 @@ public class ConfigsDownloader {
 		this.downloader = downloader;
 	}
 
+	// timestamp on OpenVPN package update
 	public  long GeTimestamp()
 	{
 		String timestampStr = "0";
@@ -54,7 +55,6 @@ public class ConfigsDownloader {
 	public  Boolean downloadConfigs(String path)
 	{
 		String configsDirPath = path + Settings.TBLK_CONFIGS_DIR;
-		String tempConfigsDirPath =  path + Settings.TBLK_CONFIGS_TEMP_DIR;
 		String configsZipPath = path + Settings.TBLK_ZIP_CONFIGS;
 
 		try {

@@ -12,7 +12,7 @@ public class UrlAddress
 
 	public static String getProtocol()
 	{
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) // SSL 1.2 support
 			return "https://";
 		else
 			return "http://";
@@ -29,6 +29,6 @@ public class UrlAddress
 	
 	public static String PROXY_LIST_URL = getProtocol() + MAIN_SERVER + FOLDER + "/proxy.list.php?v2=1&akey=";
 	public static String TNBLK_CERTS = getProtocol() + MAIN_SERVER + FOLDER + "/ovpn_files.zip";
-	public static String OPENVPN_FILES_TIMESTAMP = getProtocol() + MAIN_SERVER + FOLDER + "/ovpn_timestamp.txt";
+	public static String OPENVPN_FILES_TIMESTAMP = getProtocol() + MAIN_SERVER + FOLDER + "/ovpn_timestamp.txt"; // timestamp for OpenVPN package change
 	public static boolean VALIDATE_CERT = true;
 }
